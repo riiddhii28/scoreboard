@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Table Tennis Scoreboard</title>
+<style>
+    body, html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #114d0a;
+        color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+    .scoreboard {
+        width: 90vw;
+        max-width: 800px;
+        padding: 2rem;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    }
+    .title {
+        font-size: 3rem;
+        margin-bottom: 3rem;
+        color: #4CAF50;
+        text-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+    .player {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 2rem 0;
+        padding: 1.5rem;
+        background-color: #292928;
+        border-radius: 15px;
+        box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+    }
+    .player-name {
+        font-size: 2.5rem;
+        font-weight: bold;
+    }
+    .score {
+        font-size: 4rem;
+        margin: 0 20px;
+    }
+    button {
+        cursor: pointer;
+        font-size: 2rem;
+        padding: 15px 30px;
+        border: none;
+        border-radius: 10px;
+        transition: background-color 0.3s, transform 0.2s;
+        color: #fff;
+        margin: 0 5px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    .increase {
+        background-color: #4CAF50;
+    }
+    .decrease {
+        background-color: #f44336;
+    }
+    button:hover {
+        transform: scale(1.05);
+    }
+</style>
+</head>
+<body>
+
+<div class="scoreboard">
+    <div class="player">
+        <span class="player-name">Player A</span>
+        <div>
+            <button class="decrease" onclick="decreaseScore('player1-score')">-</button>
+            <span class="score" id="player1-score">0</span>
+            <button class="increase" onclick="increaseScore('player1-score')">+</button>
+        </div>
+    </div>
+    <div class="player">
+        <span class="player-name">Player B</span>
+        <div>
+            <button class="decrease" onclick="decreaseScore('player2-score')">-</button>
+            <span class="score" id="player2-score">0</span>
+            <button class="increase" onclick="increaseScore('player2-score')">+</button>
+        </div>
+    </div>
+</div>
+
+<script>
+function increaseScore(playerId) {
+    const scoreElement = document.getElementById(playerId);
+    let score = parseInt(scoreElement.textContent, 10);
+    scoreElement.textContent = ++score;
+    checkWinner();
+}
+
+function decreaseScore(playerId) {
+    const scoreElement = document.getElementById(playerId);
+    let score = parseInt(scoreElement.textContent, 10);
+    if (score > 0) {
+        scoreElement.textContent = --score;
+        checkWinner(); 
+    }
+}
+
+// Load match details from localStorage
+window.onload = function() {
+    const ttMatchData = JSON.parse(localStorage.getItem("ttMatchData"));
+    if (ttMatchData) {
+        // Assuming player names are stored under 'playerA' and 'playerB' in ttMatchData
+        document.querySelector(".player:nth-child(1) .player-name").textContent = ttMatchData.playerA || 'Player 1';
+        document.querySelector(".player:nth-child(2) .player-name").textContent = ttMatchData.playerB || 'Player 2';
+    }
+};
+
+
+function checkWinner() {
+    const score1 = parseInt(document.getElementById('player1-score').textContent, 10);
+    const score2 = parseInt(document.getElementById('player2-score').textContent, 10);
+
+    // Ensure a 2-point lead to win or a 7-0 situation, and at least 11 points to win.
+   // if ((score1 >= 11 || score2 >= 11 || score1 == 7 || score2 == 7) && Math.abs(score1 - score2) >= 2)
+   if (((score1 >= 11 || score2 >= 11) && Math.abs(score1 - score2) >= 2) || (score1 == 7 && score2 == 0) || (score2 == 7 && score1 == 0))
+    {
+        const winner = score1 > score2 ? 'Player 1' : 'Player 2';
+        alertWinner(winner); // Call alertWinner with the winner's name
+    }
+}
+
+function alertWinner(winner) {
+    alert(`${winner} wins!`);
+
+    // Retrieve match details and add the winner
+    let ttMatchData = JSON.parse(localStorage.getItem("ttMatchData"));
+    ttMatchData.winner = winner;
+
+    // Store the updated match details including the winner in ttMatchResults
+    let ttMatchResults = JSON.parse(localStorage.getItem("ttMatchResults")) || [];
+    ttMatchResults.push(ttMatchData);
+    localStorage.setItem("ttMatchResults", JSON.stringify(ttMatchResults));
+
+    resetScores();
+
+    // Redirect to the results page
+    window.location.href = '/ttresults'; // Update this path
+}
+
+
+
+function resetScores() {
+    document.getElementById('player1-score').textContent = '0';
+    document.getElementById('player2-score').textContent = '0';
+}
+
+</script>
+
+</body>
+</html>

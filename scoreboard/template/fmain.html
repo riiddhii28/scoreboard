@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Match Results</title>
+    <style>
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f5f5; /* Light gray background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: #333; /* Dark gray text */
+}
+.container {
+    background-color: #ffffff; /* White background for the container */
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    width: 90%;
+    max-width: 1000px; /* Adjusted max width */
+    text-align: center;
+    overflow-x: auto; /* Ensure table is responsive */
+}
+h1 {
+    margin-bottom: 30px;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+th, td {
+    padding: 15px; /* Comfortable padding */
+    border-bottom: 1px solid #ddd; /* Lighter border */
+    color: #333; /* Dark text */
+    text-align: left; /* Align text to the left */
+}
+th {
+    background-color: #4CAF50; /* Vibrant green for column headers */
+    color: #ffffff; /* White text */
+    font-weight: bold;
+}
+tr:nth-child(even) {
+    background-color: #f9f9f9; /* Very light gray for alternating rows */
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Football Match Results</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Team A</th>
+                    <th>Team B</th>
+                    <th>Winner</th>
+                </tr>
+            </thead>
+            <tbody id="viewResultsBody">
+                <!-- Results will be dynamically injected -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        window.onload = function() {
+            const results = JSON.parse(localStorage.getItem("matchResults")) || [];
+            const viewResultsBody = document.getElementById("viewResultsBody");
+            results.forEach((match) => {
+                const row = `<tr>
+                                <td>${match.date}</td>
+                                <td>${match.time}</td>
+                                <td>${match.teamA}</td>
+                                <td>${match.teamB}</td>
+                                <td>${match.winner}</td>
+                             </tr>`;
+                viewResultsBody.innerHTML += row;
+            });
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cricket Scorecard</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+#inputForm {
+    margin-bottom: 20px;
+}
+input, button {
+    margin: 5px;
+    padding: 10px;
+    font-size: 16px;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+table, th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+th {
+    background-color: #f2f2f2;
+}
+.deleteBtn {
+    color: white;
+    background-color: red;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+</style>
+</head>
+<body>
+<div id="inputForm">
+    <input type="text" id="playerName" placeholder="Player Name">
+    <input type="number" id="runs" placeholder="Runs">
+    <input type="number" id="ballsFaced" placeholder="Balls Faced">
+    <input type="number" id="wicketsTaken" placeholder="Wickets Taken">
+    <input type="number" id="ballsBowled" placeholder="Balls Bowled">
+    <input type="number" id="runsGiven" placeholder="Runs Given">
+    <input type="text" id="winnerName" placeholder="Winner Name">
+    <button onclick="addPlayer()">Add Player</button>
+    <button onclick="saveDataAndNavigate()">Save & View Winner</button>
+</div>
+<div id="scorecard">
+    <table>
+        <thead>
+            <tr>
+                <th>Player Name</th>
+                <th>Runs</th>
+                <th>Balls Faced</th>
+                <th>Wickets Taken</th>
+                <th>Balls Bowled</th>
+                <th>Runs Given</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody id="scorecardBody">
+            <!-- Player rows will be added here -->
+        </tbody>
+    </table>
+</div>
+<script>
+function addPlayer() {
+    const playerName = document.getElementById("playerName").value;
+    const runs = document.getElementById("runs").value;
+    const ballsFaced = document.getElementById("ballsFaced").value;
+    const wicketsTaken = document.getElementById("wicketsTaken").value;
+    const ballsBowled = document.getElementById("ballsBowled").value;
+    const runsGiven = document.getElementById("runsGiven").value;
+    const deleteButton = `<button onclick="deleteRow(this)" class="deleteBtn">Delete</button>`;
+    const tableRow = document.createElement("tr");
+    tableRow.innerHTML = `
+        <td>${playerName}</td>
+        <td>${runs}</td>
+        <td>${ballsFaced}</td>
+        <td>${wicketsTaken}</td>
+        <td>${ballsBowled}</td>
+        <td>${runsGiven}</td>
+        <td>${deleteButton}</td>
+    `;
+    document.getElementById("scorecardBody").appendChild(tableRow);
+    document.getElementById("playerName").value = '';
+    document.getElementById("runs").value = '';
+    document.getElementById("ballsFaced").value = '';
+    document.getElementById("wicketsTaken").value = '';
+    document.getElementById("ballsBowled").value = '';
+    document.getElementById("runsGiven").value = '';
+}
+function deleteRow(btn) {
+    const row = btn.parentNode.parentNode;
+    row.parentNode.removeChild(row);
+}
+function saveDataAndNavigate() {
+    const winnerName = document.getElementById("winnerName").value;
+    const tableBody = document.getElementById("scorecardBody");
+    const rows = tableBody.querySelectorAll("tr");
+    const data = [];
+
+    rows.forEach(row => {
+        const cells = row.querySelectorAll("td");
+        let rowData = {
+            playerName: cells[0].textContent,
+            runs: cells[1].textContent,
+            ballsFaced: cells[2].textContent,
+            wicketsTaken: cells[3].textContent,
+            ballsBowled: cells[4].textContent,
+            runsGiven: cells[5].textContent
+        };
+        data.push(rowData);
+    });
+
+    // Save data to localStorage
+    localStorage.setItem("scoreboardData", JSON.stringify(data));
+    localStorage.setItem("winnerName", winnerName);
+
+    // Navigate to the result page
+    window.location.href = "../cricketmain";
+}
+
+</script>
+</body>
+</html>

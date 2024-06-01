@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cricket Scorecard Winner</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+table, th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+th {
+    background-color: #f2f2f2;
+}
+</style>
+</head>
+<body>
+<div id="scorecard">
+    <table>
+        <thead>
+            <tr>
+                <th>Player Name</th>
+                <th>Runs</th>
+                <th>Balls Faced</th>
+                <th>Wickets Taken</th>
+                <th>Balls Bowled</th>
+                <th>Runs Given</th>
+                <th>Winner</th>
+            </tr>
+        </thead>
+        <tbody id="scorecardBody">
+            <!-- Data rows will be added here -->
+        </tbody>
+    </table>
+</div>
+<script>
+window.onload = function() {
+    const data = JSON.parse(localStorage.getItem("scoreboardData"));
+    const winnerName = localStorage.getItem("winnerName");
+    if (!data) return;
+    const tableBody = document.getElementById("scorecardBody");
+    data.forEach(player => {
+        const isWinner = player.playerName === winnerName ? "Winner" : "";
+        const tableRow = document.createElement("tr");
+        tableRow.innerHTML = `
+            <td>${player.playerName}</td>
+            <td>${player.runs}</td>
+            <td>${player.ballsFaced}</td>
+            <td>${player.wicketsTaken}</td>
+            <td>${player.ballsBowled}</td>
+            <td>${player.runsGiven}</td>
+            <td>${isWinner}</td>
+        `;
+        tableBody.appendChild(tableRow);
+    });
+
+    // Add winner information row
+    const winnerRow = document.createElement("tr");
+    winnerRow.innerHTML = `<td colspan="6">Winner</td><td>${winnerName} wins</td>`;
+    tableBody.appendChild(winnerRow);
+}
+</script>
+</body>
+</html>

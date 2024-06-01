@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Match Input</title>
+    <style>
+        body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #eef4f9; /* Soft blue background for a calming effect */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: #333; /* Darker text for contrast and readability */
+}
+.container {
+    background-color: #ffffff; /* White background for the container */
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); /* Softer shadow for a sleek look */
+    width: 90%;
+    max-width: 600px;
+    text-align: center;
+}
+h1 {
+    margin-bottom: 30px;
+}
+form {
+    margin-bottom: 30px;
+}
+label {
+    font-weight: normal;
+    display: block;
+    margin-bottom: 10px;
+    font-size: 18px; /* Retained for better readability */
+    color: #555; /* Slightly darker for readability */
+}
+input {
+    width: calc(100% - 20px);
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc; /* Lighter border for a subtle look */
+    background-color: #f9f9f9; /* Very light background for inputs */
+    color: #333; /* Darker text for input */
+    margin-bottom: 20px;
+}
+button {
+    background-color: #28a745; /* Refreshing green for buttons */
+    color: #fff;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+button:hover {
+    background-color: #218838; /* Darker green on hover for a nice effect */
+    transform: scale(1.05);
+}
+@media (max-width: 768px) { /* Responsive adjustments */
+    .container {
+        width: 95%;
+        padding: 20px;
+    }
+    h1, label {
+        font-size: 16px; /* Adjusted for smaller screens */
+    }
+    input, button {
+        padding: 10px 20px;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Enter Football Match Details</h1>
+        <form id="matchForm">
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date" required>
+            
+            <label for="time">Time:</label>
+            <input type="time" id="time" name="time" required>
+            
+            <label for="teamA">Team A:</label>
+            <input type="text" id="teamA" name="teamA" required>
+            
+            <label for="teamB">Team B:</label>
+            <input type="text" id="teamB" name="teamB" required>
+            
+            <button type="submit">Track Football Score</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("matchForm").onsubmit = function(event) {
+            event.preventDefault();
+            const matchData = {
+                date: document.getElementById("date").value,
+                time: document.getElementById("time").value,
+                teamA: document.getElementById("teamA").value,
+                teamB: document.getElementById("teamB").value
+            };
+            localStorage.setItem("matchData", JSON.stringify(matchData));
+            window.location.href = "/football"; // Redirect to the scorecard page
+        };
+    </script>
+</body>
+</html>

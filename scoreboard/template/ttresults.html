@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Table Tennis Match Results</title>
+    <style>
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f5f5; /* Light gray background for a soft look */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: #333; /* Dark gray text for contrast and readability */
+}
+.container {
+    background-color: #ffffff; /* White background for the container */
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    width: 90%;
+    max-width: 1000px; /* Adjusted max width for full page utilization */
+    text-align: center;
+    overflow-x: auto; /* Maintain table responsiveness */
+}
+h1 {
+    margin-bottom: 30px;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+th, td {
+    padding: 15px; /* Comfortable padding */
+    border-bottom: 1px solid #ddd; /* Lighter border for a delicate contrast */
+    color: #333; /* Dark text for legibility */
+    text-align: left; /* Text aligned to the left for readability */
+}
+th {
+    background-color: #4CAF50; /* Vibrant green for column headers */
+    color: #ffffff; /* White text for readability */
+    font-weight: bold;
+}
+tr:nth-child(even) {
+    background-color: #f9f9f9; /* Very light gray for alternating row color */
+}
+.deleteBtn {
+    background-color: #E74C3C; /* Red for delete button */
+    color: #ffffff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.deleteBtn:hover {
+    background-color: #C0392B; /* Darker red on hover for visual feedback */
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Table Tennis Match Results</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Player A</th>
+                    <th>Branch A</th>
+                    <th>Player B</th>
+                    <th>Branch B</th>
+                    <th>Winner</th>
+                    <th>Action</th> <!-- Added header for delete action -->
+                </tr>
+            </thead>
+            <tbody id="resultsBody">
+                <!-- Results will be dynamically injected -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        window.onload = function() {
+            const results = JSON.parse(localStorage.getItem("ttMatchResults")) || [];
+            const resultsBody = document.getElementById("resultsBody");
+            results.forEach((match, index) => {
+                const row = `<tr>
+                                <td>${match.date}</td>
+                                <td>${match.time}</td>
+                                <td>${match.playerA}</td>
+                                <td>${match.branchA}</td>
+                                <td>${match.playerB}</td>
+                                <td>${match.branchB}</td>
+                                <td>${match.winner}</td>
+                                <td><button class="deleteBtn" onclick="deleteRow(${index})">Delete</button></td>
+                             </tr>`;
+                resultsBody.innerHTML += row;
+            });
+        };
+
+        function deleteRow(index) {
+            let results = JSON.parse(localStorage.getItem("ttMatchResults")) || [];
+            results.splice(index, 1); // Remove the item at the specified index
+            localStorage.setItem("ttMatchResults", JSON.stringify(results)); // Update local storage
+            window.location.reload(); // Reload the page to reflect changes
+
+
+            
+        }
+    </script>
+</body>
+</html>
